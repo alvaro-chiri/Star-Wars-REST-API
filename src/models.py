@@ -20,10 +20,10 @@ class User(db.Model):
 
 class People(db.Model):
     __tablename__ = 'people'
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    haircolor = Column(String)
-    eyecolor = Column(String)
+    id = db.Column(Integer, primary_key=True)
+    name = db.Column(String)
+    haircolor = db.Column(String)
+    eyecolor = db.Column(String)
 
     def __repr__(self):
         return '<People %r>' % self.name
