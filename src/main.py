@@ -30,14 +30,48 @@ def handle_invalid_usage(error):
 def sitemap():
     return generate_sitemap(app)
 
+@app.route('/people', methods=['GET'])
+def handle_hello():
+    return None
+
+@app.route('/people/int:people_id', methods=['GET'])
+def handle_hello():
+    return None
+
+@app.route('/planets', methods=['GET'])
+def handle_hello():
+    return None
+
+@app.route('/planets/int:planet_id', methods=['GET'])
+def handle_hello():
+    return None
+
 @app.route('/user', methods=['GET'])
 def handle_hello():
+    return None
 
-    response_body = {
-        "msg": "Hello, this is your GET /user response "
-    }
+@app.route('/user/favorites', methods=['GET'])
+def handle_hello():
+    return None
 
-    return jsonify(response_body), 200
+@app.route('/user/favorites/planet/int:planet_id', methods=['POST'])
+def handle_hello():
+    return None
+
+@app.route('/user/favorites/people/int:people_id', methods=['POST'])
+def handle_hello():
+    return None
+
+@app.route('/user/favorites/planet/int:planet_id', methods=['DELETE'])
+def handle_hello():
+    return None
+
+@app.route('/user/favorites/people/int:people_id', methods=['DELETE'])
+def handle_hello():
+    return None
+
+
+
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
