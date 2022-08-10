@@ -9,6 +9,8 @@ from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
 from models import db, User
+from models import db, People
+from models import db, Planets
 #from models import Person
 
 app = Flask(__name__)
@@ -31,43 +33,51 @@ def sitemap():
     return generate_sitemap(app)
 
 @app.route('/people', methods=['GET'])
-def handle_hello():
-    return None
+def allPeople():
+    people_query = People.query.all()
+    all_people = list(map(lambda x: x.serialize(), people_query))
+    return jsonify(all_people), 200
 
 @app.route('/people/int:people_id', methods=['GET'])
-def handle_hello():
-    return None
+def onePerson():
+    one_person = People.query.get(id)
+    return jsonify(one_person), 200
 
 @app.route('/planets', methods=['GET'])
-def handle_hello():
-    return None
+def allPlanets():
+    planets_query = Planets.query.all()
+    all_planets = list(map(lambda x: x.serialize(), planets_query))
+    return jsonify(all_planets), 200
 
 @app.route('/planets/int:planet_id', methods=['GET'])
-def handle_hello():
+def onePlanet():
     return None
 
 @app.route('/user', methods=['GET'])
-def handle_hello():
-    return None
+def user():
+    users = User.query.all()
+    one_user = list(map(lambda x: x.serialize(), users))
+    return jsonify(one_user), 200
+
 
 @app.route('/user/favorites', methods=['GET'])
-def handle_hello():
+def userFavs():
     return None
 
 @app.route('/user/favorites/planet/int:planet_id', methods=['POST'])
-def handle_hello():
+def addFavPlanets():
     return None
 
 @app.route('/user/favorites/people/int:people_id', methods=['POST'])
-def handle_hello():
+def addFavPeople():
     return None
 
 @app.route('/user/favorites/planet/int:planet_id', methods=['DELETE'])
-def handle_hello():
+def delFavPlanet():
     return None
 
 @app.route('/user/favorites/people/int:people_id', methods=['DELETE'])
-def handle_hello():
+def delFavPeople():
     return None
 
 
