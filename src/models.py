@@ -74,9 +74,9 @@ class Favorites(db.Model):
     title = db.Column(db.String(250))
     user_id = db.Column(db.Integer, db.ForeignKey("User.id"))
     user = db.relationship('User')
-    planets_id = db.Column(db.Integer, db.ForeignKey("Planets.id"))
+    planets_id = db.Column(db.Integer, db.ForeignKey("Planets.id"), nullable=True)
     planets = db.relationship('Planets', lazy=True)
-    people_id = db.Column(db.Integer, db.ForeignKey("People.id"))
+    people_id = db.Column(db.Integer, db.ForeignKey("People.id"), nullable=True)
     people = db.relationship('People', lazy=True)
 
     def __repr__(self):
@@ -86,8 +86,8 @@ class Favorites(db.Model):
         return {
             "title": self.title,
             "user_id": self.user_id,            
-            "planets": list(map(lambda x: x.serialize(), self.planets)),
-            "people": list(map(lambda x: x.serialize(), self.people))
+            "planets": self.planets_id,
+            "people": self.people_id
         }
 
 

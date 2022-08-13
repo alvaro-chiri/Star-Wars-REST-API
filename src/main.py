@@ -39,10 +39,10 @@ def allPeople():
     all_people = list(map(lambda x: x.serialize(), people_query))
     return jsonify(all_people), 200
 
-@app.route('/people/int:people_id', methods=['GET'])
-def onePerson():
-    one_person = People.query.get(id)
-    return jsonify(one_person), 200
+@app.route('/people/<int:people_id>', methods=['GET'])
+def onePerson(people_id):
+    one_person = People.query.get(people_id)
+    return jsonify(one_person.serialize()), 200
 
 @app.route('/planets', methods=['GET'])
 def allPlanets():
@@ -50,9 +50,10 @@ def allPlanets():
     all_planets = list(map(lambda x: x.serialize(), planets_query))
     return jsonify(all_planets), 200
 
-@app.route('/planets/int:planet_id', methods=['GET'])
-def onePlanet():
-    return None
+@app.route('/planets/<int:planets_id>', methods=['GET'])
+def onePlanet(planets_id):
+    one_planet = Planets.query.get(planets_id)
+    return jsonify(one_planet.serialize()), 200
 
 @app.route('/user', methods=['GET'])
 def user():
@@ -63,21 +64,26 @@ def user():
 
 @app.route('/user/favorites', methods=['GET'])
 def userFavs():
+    favorites_query = Favorites.query.all()
+    all_favorites = list(map(lambda x: x.serialize(), favorites_query))
+    return jsonify(all_favorites), 200
+
+@app.route('/user/favorites/planet/<int:planets_id>', methods=['POST'])
+def addFavPlanets(planets_id):
+    planet = Planets.query.get(planets_id)
+    # create if statement
+    favorite = Favorites(user_id = 1, planets_id = planets_id)
     return None
 
-@app.route('/user/favorites/planet/int:planet_id', methods=['POST'])
-def addFavPlanets():
-    return None
-
-@app.route('/user/favorites/people/int:people_id', methods=['POST'])
+@app.route('/user/favorites/people/<int:people_id>', methods=['POST'])
 def addFavPeople():
     return None
 
-@app.route('/user/favorites/planet/int:planet_id', methods=['DELETE'])
+@app.route('/user/favorites/planet/<int:planets_id>', methods=['DELETE'])
 def delFavPlanet():
     return None
 
-@app.route('/user/favorites/people/int:people_id', methods=['DELETE'])
+@app.route('/user/favorites/people/<int:people_id>', methods=['DELETE'])
 def delFavPeople():
     return None
 
