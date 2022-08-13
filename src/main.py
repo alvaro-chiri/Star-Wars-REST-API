@@ -11,6 +11,7 @@ from admin import setup_admin
 from models import db, User
 from models import db, People
 from models import db, Planets
+from models import db, Favorites
 #from models import Person
 
 app = Flask(__name__)

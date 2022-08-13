@@ -3,14 +3,13 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 class User(db.Model):
+    __tablename__ = 'User'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
     firstname = db.Column(db.String(30))
     lastname = db.Column(db.String(30))
     username = db.Column(db.String(30), unique=True)
-    # favorite_people = db.relationship('People', lazy=True)
-    # favorite_planet = db.relationship('Planet', lazy=True)
 
     def __repr__(self):
         return '<User %r>' % self.username
@@ -28,13 +27,12 @@ class User(db.Model):
         }
 
 class People(db.Model):
-    __tablename__ = 'people'
+    __tablename__ = 'People'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30))
     haircolor = db.Column(db.String(30))
     eyecolor = db.Column(db.String(30))
     gender = db.Column(db.String(30))
-    # user_id = db.Column(db.Integer, db.ForeignKey("User.id"))
 
     def __repr__(self):
         return '<People %r>' % self.name
@@ -49,14 +47,13 @@ class People(db.Model):
             }
 
 class Planets(db.Model):
-    __tablename__ = 'planets'
+    __tablename__ = 'Planets'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30))
     diameter = db.Column(db.String(30))
     gravity = db.Column(db.String(30))
     terrain = db.Column(db.String(30))
     climate = db.Column(db.String(30))
-    # user_id = db.Column(db.Integer, db.ForeignKey("User.id"))
 
     def __repr__(self):
         return '<Planets %r>' % self.name
@@ -70,5 +67,27 @@ class Planets(db.Model):
             "terrain": self.terrain,
             "climate": self.climate
             }
+
+class Favorites(db.Model):
+    __tablename__ = 'favorites'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(250))
+    user_id = db.Column(db.Integer, db.ForeignKey("User.id"))
+    user = db.relationship('User')
+    planets_id = db.Column(db.Integer, db.ForeignKey("Planets.id"))
+    planets = db.relationship('Planets', lazy=True)
+    people_id = db.Column(db.Integer, db.ForeignKey("People.id"))
+    people = db.relationship('People', lazy=True)
+
+    def __repr__(self):
+        return '<Favorites %r>' % self.name
+    
+    def serialize(self):
+        return {
+            "title": self.title,
+            "user_id": self.user_id,            
+            "planets": list(map(lambda x: x.serialize(), self.planets)),
+            "people": list(map(lambda x: x.serialize(), self.people))
+        }
 
 
