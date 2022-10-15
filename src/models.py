@@ -1,3 +1,9 @@
+import os
+import sys
+from sqlalchemy import Column, ForeignKey, Integer, String, Boolean
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
+from sqlalchemy import create_engine
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -7,9 +13,10 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
-    firstname = db.Column(db.String(30))
-    lastname = db.Column(db.String(30))
     username = db.Column(db.String(30), unique=True)
+    people_favorites = relationship('Favorite_People', backref='User', lazy=True)
+    planets_favorites = relationship('Favorite_Planets', backref='User', lazy=True)
+
 
     def __repr__(self):
         return '<User %r>' % self.username
@@ -18,8 +25,6 @@ class User(db.Model):
         return {
             "id": self.id,
             "email": self.email,
-            "firstname": self.firstname,
-            "lastname": self.lastname,
             "username": self.username,
             # "favorite_people": list(map(lambda x: x.serialize(), self.favorite_people)),
             # "favorite_planet": list(map(lambda x: x.serialize(), self.favorite_planet))
@@ -33,6 +38,8 @@ class People(db.Model):
     haircolor = db.Column(db.String(30))
     eyecolor = db.Column(db.String(30))
     gender = db.Column(db.String(30))
+    people_favorite = relationship('Favorite_People', backref='People', lazy=True)
+
 
     def __repr__(self):
         return '<People %r>' % self.name
@@ -54,6 +61,7 @@ class Planets(db.Model):
     gravity = db.Column(db.String(30))
     terrain = db.Column(db.String(30))
     climate = db.Column(db.String(30))
+    planets_favorite = relationship('Favorite_Planets', backref='Planets', lazy=True)
 
     def __repr__(self):
         return '<Planets %r>' % self.name
@@ -68,26 +76,37 @@ class Planets(db.Model):
             "climate": self.climate
             }
 
-class Favorites(db.Model):
-    __tablename__ = 'favorites'
+class Favorite_People(db.Model):
+    __tablename__ = 'Favorite_People'
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(250))
     user_id = db.Column(db.Integer, db.ForeignKey("User.id"))
-    user = db.relationship('User')
-    planets_id = db.Column(db.Integer, db.ForeignKey("Planets.id"), nullable=True)
-    planets = db.relationship('Planets', lazy=True)
     people_id = db.Column(db.Integer, db.ForeignKey("People.id"), nullable=True)
-    people = db.relationship('People', lazy=True)
 
     def __repr__(self):
-        return '<Favorites %r>' % self.name
+        return '<Favorite_People %r>' % self.user_id
     
     def serialize(self):
+        user = User.query.get(self.user_id)
         return {
-            "title": self.title,
-            "user_id": self.user_id,            
-            "planets": self.planets_id,
-            "people": self.people_id
+            "id": self.id,
+            "user": user.username,
+            "people_id": self.people_id
         }
 
+class Favorite_Planets(db.Model):
+    __tablename__ = 'Favorite_Planets'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    planets_id = db.Column(db.Integer, db.ForeignKey("Planets.id"), nullable=True)
+
+    def __repr__(self):
+        return '<Favorite_Planets %r>' % self.user_id
+    
+    def serialize(self):
+        user = User.query.get(self.user_id)
+        return {
+            "id": self.id,
+            "user": user.username,
+            "planets_id": self.planets_id
+        }
 
