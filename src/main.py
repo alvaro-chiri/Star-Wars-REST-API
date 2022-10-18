@@ -11,8 +11,8 @@ from admin import setup_admin
 from models import db, User
 from models import db, People
 from models import db, Planets
-from models import db, Favorite_People
-from models import db, Favorite_Planets
+# from models import db, Favorite_People
+# from models import db, Favorite_Planets
 #from models import Person
 
 app = Flask(__name__)
@@ -83,37 +83,39 @@ def create_user():
     db.session.commit()
     return jsonify(request_body_user), 200
 
-@app.route('/user/favoriteplanets', methods=['POST'])
-def addFavPlanets():
-    request_body_planets = request.get_json()
-    add_planet = Favorite_Planets(user_id=request_body_planets["user_id"], planet_id=request_body_planet["planet_id"])
-    db.session.add(add_planet)
-    db.session.commit()
-    return jsonify(request_body_planet), 200
+# @app.route('/user/favoriteplanets', methods=['POST'])
+# def addFavPlanets():
+#     request_body_planets = request.get_json()
+#     add_planet = Favorite_Planets(user_id=request_body_planets["user_id"], planet_id=request_body_planet["planet_id"])
+#     db.session.add(add_planet)
+#     db.session.commit()
+#     return jsonify(request_body_planet), 200
 
-@app.route('/user/favoritepeople', methods=['POST'])
-def addFavPeople():
-    request_body_people = request.get_json()
-    add_people = Favorite_People(user_id=request_body_planet["user_id"], people_id=request_body_planet["people_id"])
-    db.session.add(add_people)
-    db.session.commit()
-    return jsonify(request_body_planet), 200
+# @app.route('/user/favoritepeople', methods=['POST'])
+# def addFavPeople():
+#     request_body_people = request.get_json()
+#     add_people = Favorite_People(user_id=request_body_planet["user_id"], people_id=request_body_planet["people_id"])
+#     db.session.add(add_people)
+#     db.session.commit()
+#     return jsonify(request_body_planet), 200
 
-@app.route('/favorite/planet/<int:planets_id>', methods=['DELETE'])
-def delFavPlanet(id):
-    remove_planet = Favorite_Planet.query.filter_by(id=id).first()
-    print("This is the planet to delete: ", id)
-    db.session.delete(remove_planet)
-    db.session.commit()
-    return jsonify(remove_planet.serialize()), 200
+# DELETE Requests
 
-@app.route('/user/favorites/people/<int:people_id>', methods=['DELETE'])
-def delFavPeople():
-    remove_people = Favorite_People.query.filter_by(id=id).first()
-    print("This is the person to delete: ", id)
-    db.session.delete(remove_people)
-    db.session.commit()
-    return jsonify(remove_character.serialize()), 200
+# @app.route('/favorite/planet/<int:planets_id>', methods=['DELETE'])
+# def delFavPlanet(id):
+#     remove_planet = Favorite_Planet.query.filter_by(id=id).first()
+#     print("This is the planet to delete: ", id)
+#     db.session.delete(remove_planet)
+#     db.session.commit()
+#     return jsonify(remove_planet.serialize()), 200
+
+# @app.route('/user/favorites/people/<int:people_id>', methods=['DELETE'])
+# def delFavPeople():
+#     remove_people = Favorite_People.query.filter_by(id=id).first()
+#     print("This is the person to delete: ", id)
+#     db.session.delete(remove_people)
+#     db.session.commit()
+#     return jsonify(remove_character.serialize()), 200
 
 
 
